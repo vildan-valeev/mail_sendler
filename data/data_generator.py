@@ -1,4 +1,3 @@
-import csv
 import string
 import time
 from datetime import datetime
@@ -20,9 +19,8 @@ def generate_row():
     )
     return r
 
-
 with open(outfile, 'w') as f:
     rows = [generate_row() for row in range(count_rows)]
     f.writelines(rows)
 tdelta = time.time() - t0
-print(tdelta)
+print(tdelta)  # 26sec for 500000

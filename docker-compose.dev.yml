@@ -1,0 +1,84 @@
+version: '3.7'
+
+services:
+  redis:
+    restart: unless-stopped
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - django_template
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+#      POSTGRES_MULTIPLE_DATABASES: sentry,myproject
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      - django_template
+
+  backend:
+    container_name: backend
+    build: ./backend
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/backend
+    entrypoint: /backend/entrypoint.dev.sh
+    depends_on:
+      - redis
+      - db
+    ports:
+      - "8000:8000"
+
+    networks:
+      - django_template
+
+  dramatiq_worker:
+    container_name: dramatiq_worker
+    build: ./backend
+    command: python manage.py rundramatiq
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - redis
+      - backend
+      - db
+    restart: unless-stopped
+    networks:
+      - django_template
+
+  caddy:
+    container_name: caddy_web_server
+    build:
+      context: ./caddy_server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy_server/Caddyfile:/etc/caddy/Caddyfile
+      - ./backend/staticfiles:/var/www/html/static
+    networks:
+      - django_template
+
+
+volumes:
+  postgres_data:
+
+
+networks:
+  django_template:
+    driver: bridge

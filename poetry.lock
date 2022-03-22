@@ -14,6 +14,22 @@ argon2 = ["argon2-cffi (>=16.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "manage.py"
+version = "0.2.10"
+description = "Human friendly CLI builder"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "migrate"
+version = "0.3.8"
+description = "A simple language agnostic database migration tool"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pytz"
 version = "2022.1"
 description = "World timezone definitions, modern and historical"
@@ -24,12 +40,18 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^2.7"
-content-hash = "c8210b2e80e612348c88c12313f27df73b3c98abed47c2cb78ae917a9232fce7"
+content-hash = "12d3467fd09751bd4061ef08817db98ce639ca7c756dc4fc622cc1fd2376c16b"
 
 [metadata.files]
 django = [
     {file = "Django-1.11-py2.py3-none-any.whl", hash = "sha256:0120b3b60760fb0617848b58aaa9702c0bf963320ed472f0879c5c55ab75b64a"},
     {file = "Django-1.11.tar.gz", hash = "sha256:b6f3b864944276b4fd1d099952112696558f78b77b39188ac92b6c5e80152c30"},
+]
+"manage.py" = [
+    {file = "manage.py-0.2.10.tar.gz", hash = "sha256:3879bbe304794f36f98fd04af4c9f1ef2b8640fc76ee25572c591beef7cfb1c1"},
+]
+migrate = [
+    {file = "migrate-0.3.8.tar.gz", hash = "sha256:5cca9d963f75b65b97e3e13456cbeecb7012610b1d515ce254daeb5be9d4b7e7"},
 ]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
