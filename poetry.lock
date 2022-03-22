@@ -1,0 +1,37 @@
+[[package]]
+name = "django"
+version = "1.11"
+description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pytz = "*"
+
+[package.extras]
+argon2 = ["argon2-cffi (>=16.1.0)"]
+bcrypt = ["bcrypt"]
+
+[[package]]
+name = "pytz"
+version = "2022.1"
+description = "World timezone definitions, modern and historical"
+category = "main"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^2.7"
+content-hash = "c8210b2e80e612348c88c12313f27df73b3c98abed47c2cb78ae917a9232fce7"
+
+[metadata.files]
+django = [
+    {file = "Django-1.11-py2.py3-none-any.whl", hash = "sha256:0120b3b60760fb0617848b58aaa9702c0bf963320ed472f0879c5c55ab75b64a"},
+    {file = "Django-1.11.tar.gz", hash = "sha256:b6f3b864944276b4fd1d099952112696558f78b77b39188ac92b6c5e80152c30"},
+]
+pytz = [
+    {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
+    {file = "pytz-2022.1.tar.gz", hash = "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7"},
+]

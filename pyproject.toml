@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "mail_sendler"
+version = "0.1.0"
+description = ""
+authors = ["vildan-valeev <vildan.maydanovich.valeev@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^2.7"
+Django = "1.11"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
