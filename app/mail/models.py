@@ -17,6 +17,7 @@ class Follower(BaseModel):
     last_name = models.CharField(max_length=200)
     b_date = models.DateTimeField()
     email = models.EmailField()
+    group = models.ForeignKey('FollowerGroup', on_delete=models.CASCADE)
 
     def __str__(self):
         return '{} | {} {}'.format(self.id, self.first_name, self.last_name)
@@ -25,7 +26,7 @@ class Follower(BaseModel):
 class FollowerGroup(BaseModel):
     """Группы подписчиков для рассылки"""
     name = models.CharField(max_length=200)
-    followers = models.ForeignKey(Follower, on_delete=models.CASCADE)
+    # followers = models.ManyToManyField('Follower', related_name='groups')
 
     def __str__(self):
         return '{} | {}'.format(self.id, self.name)

@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 from random import randint, choice
 
-count_rows = 500000
+count_rows = 100
 header = ['first_name', 'last_name', 'b_date', 'email']
 
 t0 = time.time()
@@ -18,6 +18,7 @@ def generate_row():
         ''.join(choice(string.ascii_lowercase) for _ in range(5)) + choice(['@mail.ru', '@gmail.com', '@yandex.ru'])
     )
     return r
+
 
 with open(outfile, 'w') as f:
     rows = [generate_row() for row in range(count_rows)]
