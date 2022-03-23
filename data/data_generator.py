@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 from random import randint, choice
 
-count_rows = 100
+count_rows = 50
 header = ['first_name', 'last_name', 'b_date', 'email']
 
 t0 = time.time()

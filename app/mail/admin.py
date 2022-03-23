@@ -2,13 +2,9 @@
 from __future__ import unicode_literals
 
 import csv
-from os import path
 
 from django.conf.urls import url
 from django.contrib import admin
-
-# Register your models here.
-from django.contrib.admin import ModelAdmin
 from django.forms import forms
 from django.shortcuts import redirect, render
 
@@ -41,39 +37,37 @@ class FollowerGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_display_links = ['id', 'name']
     inlines = [FollowerInline]
-
     # filter_horizontal = ['followers']
     change_form_template = 'admin/mail/followergroup/change_form.html'
+    group_id = None
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Переопределние. Прокидываем атрибут group_id в import_csv для использования в создании Follower"""
+        if obj:
+            self.group_id = obj.id
+        return super(FollowerGroupAdmin, self).get_form(request, obj, **kwargs)
 
     def get_urls(self):
-        # super(ModelAdmin, self).__init__()
         urls = super(FollowerGroupAdmin, self).get_urls()
         my_urls = [
             url('import-csv/', self.import_csv),
         ]
         return my_urls + urls
 
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        extra_context = extra_context or {}
-        extra_context['object_id'] = object_id
-        return super(FollowerGroupAdmin, self).change_view(
-            request, object_id, form_url, extra_context=extra_context,
-        )
-
     def import_csv(self, request):
         if request.method == "POST":
-            print(dir(request),)
+            print("POST", request.POST,)
             csv_file = request.FILES["csv_file"]
             reader = csv.reader(csv_file)
-            print(request.__dict__)
-            group = 2
             Follower.objects.bulk_create(
-                [Follower(first_name=i[0], last_name=i[1], b_date=i[2], email=i[3], group_id=group) for i in reader])
-
+                [Follower(first_name=i[0], last_name=i[1], b_date=i[2], email=i[3], group_id=self.group_id) for i in
+                 reader])
             self.message_user(request, "Your csv file has been imported")
             return redirect("..")
         form = CsvImportForm()
+        print('кукана')
         payload = {"form": form}
+
         return render(
             request, "admin/mail/followergroup/csv_form.html", payload
         )
