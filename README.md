@@ -27,4 +27,4 @@ $ python manage.py loaddata default_data.json
 3. Допускается Загрузка списка подписчиков без проверок на наличие в бд - bulk_create. 
 Если делать проверку(не засорять бд), то необходимо ставить поле M2M в FollowerGroup вместо FK в Followers, переписывать [bulk_create](https://stackoverflow.com/questions/34090582/proper-way-to-bulk-create-for-manytomany-field-django)
 4. Распотрошил инлайн [пагинатор](https://github.com/shinneider/django-admin-inline-paginator), переписал на python2
-5. Создал генератор csv на 500000 записей на python3 26секунд на Golang ([репо здесь](https://github.com/vildan-valeev/csv_data_generator)) - 9 секунд
+5. Создал генератор csv на 500000 записей на python3 - 26секунд, на Golang (>>> [репо здесь](https://github.com/vildan-valeev/csv_data_generator) <<<) - 9 секунд
