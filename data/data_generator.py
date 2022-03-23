@@ -3,8 +3,7 @@ import time
 from datetime import datetime
 from random import randint, choice
 
-count_rows = 50
-header = ['first_name', 'last_name', 'b_date', 'email']
+count_rows = 500000
 
 t0 = time.time()
 outfile = 'csv_file.csv'
