@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for src project.
 
@@ -13,6 +14,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from celery.schedules import crontab
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -54,7 +57,7 @@ ROOT_URLCONF = 'src.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "media", "html_templates"), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,6 +117,12 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'  # сбор всей статики в одну директорию для вебсервера nginx
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),  # указываем где еще может находиться статика помимо app/static/app/css/example.css
+]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'EMAIL_HOST'
@@ -125,3 +134,40 @@ EMAIL_USE_SS = False
 EMAIL_TIMEOUT = None
 EMAIL_SSL_KEYFILE = None
 EMAIL_SSL_CERTFILE = None
+
+
+# ----------------------------------------- CELERY -----------------------------------------------
+BROKER_URL = 'redis://127.0.0.1:6379'
+BROKER_TRANSPORT = 'redis'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 604800}
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_BROKER_TRANSPORT = 'redis'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 604800}
+
+CELERY_RESULT_BACKEND = BROKER_URL
+
+CELERY_TASK_RESULT_EXPIRES = datetime.timedelta(days=1)  # Take note of the CleanUp task in middleware/tasks.py
+CELERY_MAX_CACHED_RESULTS = 1000
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+CELERY_TRACK_STARTED = True
+CELERY_SEND_EVENTS = True
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+
+REDIS_CONNECT_RETRY = True
+REDIS_DB = 0
+BROKER_POOL_LIMIT = 2
+CELERYD_CONCURRENCY = 1
+CELERYD_TASK_TIME_LIMIT = 600
+
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'messaging.tasks.task_number_one',
+        'schedule': crontab(minute='*/1')
+    },
+    'task-number-two': {
+        'task': 'messaging.tasks.task_number_two',
+        'schedule': crontab(minute='*/1')
+    }
+}
+

@@ -10,5 +10,6 @@ from mail.services.sending_emails import send_emails
 def order_publication(sender, instance, created, **kwargs):
     # ыва
     if created:
+        print('SIGNAL')
         # TODO: переключить на celery task
-        send_emails()
+        send_emails(instance.id)

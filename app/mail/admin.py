@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import csv
-
 from django.conf.urls import url
 from django.contrib import admin
 from django.forms import forms
@@ -62,8 +60,9 @@ class FollowerGroupAdmin(admin.ModelAdmin):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
             # TODO: add to celery tasks
-            result = save_csv(csv_file, self.group_id)
-            self.message_user(request, result)
+            print(self.group_id)
+            text, level = save_csv(csv_file, self.group_id)
+            self.message_user(request, text, level)
             return redirect("..")
         form = CsvImportForm()
         payload = {"form": form}
