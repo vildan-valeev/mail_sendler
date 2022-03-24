@@ -26,7 +26,34 @@ class Follower(BaseModel):
 class FollowerGroup(BaseModel):
     """Группы подписчиков для рассылки"""
     name = models.CharField(max_length=200)
+
     # followers = models.ManyToManyField('Follower', related_name='groups')
 
     def __str__(self):
         return '{} | {}'.format(self.id, self.name)
+
+
+class HtmlTemplate(BaseModel):
+    """"""
+    name = models.CharField(max_length=100)
+    html_template = models.FileField()
+
+    # Шаблон без изображений. Если требуется изображения, то создаем отдельную модель подгружаем, тут привязываем M2M
+    # images = ...
+
+    def __str__(self):
+        return '{} | {}'.format(self.id, self.name)
+
+
+class EmailSendler(BaseModel):
+    from_email = models.EmailField()
+    subject = models.CharField(max_length=78)
+    text = models.TextField(max_length=3000)
+    # Если html НЕ вставлен, то отправляется только текст.
+    # Если вставлен, то обработка шаблона перед отправкой каждому Follower
+    html_template = models.ForeignKey(HtmlTemplate, on_delete=models.PROTECT, blank=True, null=True)
+    # attach = models.FileField()
+    delayed = models.DateTimeField(help_text='Choose time when need to send emails,', blank=True, null=True)
+
+    def __str__(self):
+        return '{} | {}'.format(self.id, self.subject)

@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 from random import randint, choice
 
-count_rows = 500000
+count_rows = 20
 
 t0 = time.time()
 outfile = 'csv_file.csv'

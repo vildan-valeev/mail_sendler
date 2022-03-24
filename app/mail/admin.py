@@ -9,7 +9,8 @@ from django.forms import forms
 from django.shortcuts import redirect, render
 
 from mail.admin_inline import TabularInlinePaginated
-from mail.models import Follower, FollowerGroup
+from mail.models import Follower, FollowerGroup, HtmlTemplate, EmailSendler
+from mail.services.saving_csv import save_csv
 
 
 class FollowerInline(TabularInlinePaginated):
@@ -27,6 +28,7 @@ class FollowerAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'first_name', 'last_name']
     # list_filter = ['groups']
     list_filter = ['group']
+    readonly_fields = ['created']
 
 
 class CsvImportForm(forms.Form):
@@ -41,8 +43,10 @@ class FollowerGroupAdmin(admin.ModelAdmin):
     change_form_template = 'admin/mail/followergroup/change_form.html'
     group_id = None
 
+    # save_on_top = True
+
     def get_form(self, request, obj=None, **kwargs):
-        """Переопределние. Прокидываем атрибут group_id в import_csv для использования в создании Follower"""
+        """Переопределение. Прокидываем атрибут group_id в import_csv для использования в создании Follower"""
         if obj:
             self.group_id = obj.id
         return super(FollowerGroupAdmin, self).get_form(request, obj, **kwargs)
@@ -56,22 +60,27 @@ class FollowerGroupAdmin(admin.ModelAdmin):
 
     def import_csv(self, request):
         if request.method == "POST":
-            print("POST", request.POST,)
             csv_file = request.FILES["csv_file"]
-            reader = csv.reader(csv_file)
-            Follower.objects.bulk_create(
-                [Follower(first_name=i[0], last_name=i[1], b_date=i[2], email=i[3], group_id=self.group_id) for i in
-                 reader])
-            self.message_user(request, "Your csv file has been imported")
+            # TODO: add to celery tasks
+            result = save_csv(csv_file, self.group_id)
+            self.message_user(request, result)
             return redirect("..")
         form = CsvImportForm()
-        print('кукана')
         payload = {"form": form}
-
         return render(
             request, "admin/mail/followergroup/csv_form.html", payload
         )
 
 
+class HtmlTemplateAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+
+
+class EmailSendlerAdmin(admin.ModelAdmin):
+    list_display = ['id', 'subject']
+
+
 admin.site.register(Follower, FollowerAdmin)
+admin.site.register(EmailSendler, EmailSendlerAdmin)
+admin.site.register(HtmlTemplate, HtmlTemplateAdmin)
 admin.site.register(FollowerGroup, FollowerGroupAdmin)

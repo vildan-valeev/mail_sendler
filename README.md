@@ -15,7 +15,7 @@ $ docker exec -it <id container or name> <command>
 ```
 ## Database dump/load
 ```sh
-$ python manage.py dumpdata --natural-foreign --natural-primary --exclude=contenttypes --exclude=auth.Permission --indent 4 > default_data.json
+$ docker exec -it backend python manage.py dumpdata --natural-foreign --natural-primary --exclude=contenttypes --exclude=auth.Permission --exclude=admin.logentry --exclude=sessions.session --indent 4 > default_data.json
 
 $ python manage.py loaddata default_data.json
 ```
