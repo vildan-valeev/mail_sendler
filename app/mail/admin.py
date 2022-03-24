@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.conf.urls import url
 from django.contrib import admin
 from django.forms import forms
 from django.shortcuts import redirect, render
+from django.urls import path
 
 from mail.admin_inline import TabularInlinePaginated
 from mail.models import Follower, FollowerGroup, HtmlTemplate, EmailSendler
@@ -52,7 +49,7 @@ class FollowerGroupAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(FollowerGroupAdmin, self).get_urls()
         my_urls = [
-            url('import-csv/', self.import_csv),
+            path('import-csv/', self.import_csv),
         ]
         return my_urls + urls
 

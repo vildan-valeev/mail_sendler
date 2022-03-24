@@ -2,7 +2,6 @@ from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
 
 
-
 def chunked(iterator, chunksize):
     """
     Yields items from 'iterator' in chunks of size 'chunksize'.
@@ -17,6 +16,7 @@ def chunked(iterator, chunksize):
             chunk = []
     if chunk:
         yield chunk
+
 
 class CeleryEmailBackend(BaseEmailBackend):
     def __init__(self, fail_silently=False, **kwargs):

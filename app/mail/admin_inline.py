@@ -28,9 +28,6 @@ class PaginationFormSetBase(object):
     def get_page_num(self):
         assert self.request is not None
         page = self.request.GET.get(self.pagination_key, '1')
-        print(page, type(page))
-        if type(page) == str:
-            page = unicode(page, 'utf-8')
         if page.isnumeric() and page > '0':
             return int(page)
 
@@ -56,7 +53,7 @@ class PaginationFormSetBase(object):
         self._queryset = self.page.object_list
 
     def __init__(self, *args, **kwargs):
-        super(PaginationFormSetBase, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.mount_paginator()
         self.mount_queryset()
 

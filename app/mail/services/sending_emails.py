@@ -1,6 +1,4 @@
-from django.conf import settings
-from django.core import mail
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.forms import model_to_dict
 from django.template.loader import render_to_string
 
@@ -27,7 +25,7 @@ def send_emails(instance_id):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-        conn = get_connection(backend=settings.EMAIL_BACKEND,)
-        conn.send_messages([dict_to_email(message)])
+        # conn = get_connection(backend=settings.EMAIL_BACKEND,)
+        # conn.send_messages([dict_to_email(message)])
 
     print('SENDING EMAIL')

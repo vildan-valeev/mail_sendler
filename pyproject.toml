@@ -5,9 +5,9 @@ description = ""
 authors = ["vildan-valeev <vildan.maydanovich.valeev@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^2.7"
-Django = "1.11"
-celery = "<=4.4.7"
+python = "^3.8"
+Django = "^4.0.3"
+celery = "^5.2.3"
 
 [tool.poetry.dev-dependencies]
 
