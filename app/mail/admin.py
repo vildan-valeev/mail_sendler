@@ -47,7 +47,7 @@ class FollowerGroupAdmin(admin.ModelAdmin):
         return super(FollowerGroupAdmin, self).get_form(request, obj, **kwargs)
 
     def get_urls(self):
-        urls = super(FollowerGroupAdmin, self).get_urls()
+        urls = super().get_urls()
         my_urls = [
             path('import-csv/', self.import_csv),
         ]

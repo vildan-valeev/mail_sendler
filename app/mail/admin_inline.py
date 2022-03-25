@@ -19,7 +19,7 @@ class InlineChangeList:
         self.params = dict(request.GET.items())
 
 
-class PaginationFormSetBase(object):
+class PaginationFormSetBase:
     queryset = None
     request = None
     per_page = 20
@@ -66,7 +66,7 @@ class TabularInlinePaginated(TabularInline):
     can_delete = False
 
     def get_formset(self, request, obj=None, **kwargs):
-        formset_class = super(TabularInlinePaginated, self).get_formset(request, obj, **kwargs)
+        formset_class = super().get_formset(request, obj, **kwargs)
 
         class PaginationFormSet(PaginationFormSetBase, formset_class):
             pagination_key = self.pagination_key
