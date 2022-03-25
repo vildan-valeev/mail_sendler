@@ -11,11 +11,11 @@ from mail.services.saving_csv import save_csv
 class FollowerInline(TabularInlinePaginated):
     # model = FollowerGroup.followers.through
     model = Follower
-    extra = 0
+    # extra = 0
 
     show_change_link = True
     readonly_fields = ['id', 'first_name', 'last_name', 'b_date', 'email']
-    per_page = 20
+    per_page = 100
 
 
 class FollowerAdmin(admin.ModelAdmin):
@@ -36,29 +36,32 @@ class FollowerGroupAdmin(admin.ModelAdmin):
     inlines = [FollowerInline]
     # filter_horizontal = ['followers']
     change_form_template = 'admin/mail/followergroup/change_form.html'
-    group_id = None
+    # group_id = None
 
     # save_on_top = True
 
-    def get_form(self, request, obj=None, **kwargs):
-        """Переопределение. Прокидываем атрибут group_id в import_csv для использования в создании Follower"""
-        if obj:
-            self.group_id = obj.id
-        return super(FollowerGroupAdmin, self).get_form(request, obj, **kwargs)
+    # def get_form(self, request, obj=None, **kwargs):
+    #     """Переопределение. Прокидываем атрибут group_id в import_csv для использования в создании Follower"""
+    #     if obj:
+    #         print(obj.id)
+    #         self.group_id = obj.id
+    #
+    #     return super().get_form(request, obj, **kwargs)
 
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('import-csv/', self.import_csv),
+            path('<path:object_id>/change/import-csv/', self.import_csv),
         ]
         return my_urls + urls
 
-    def import_csv(self, request):
+    def import_csv(self, request, *args, **kwargs):
+        print(args, kwargs)
         if request.method == "POST":
+
             csv_file = request.FILES["csv_file"]
             # TODO: add to celery tasks
-            print(self.group_id)
-            text, level = save_csv(csv_file, self.group_id)
+            text, level = save_csv(csv_file, kwargs.get('object_id'))
             self.message_user(request, text, level)
             return redirect("..")
         form = CsvImportForm()

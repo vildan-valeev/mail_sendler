@@ -22,7 +22,8 @@ _ENV = environ['DJANGO_ENV']
 
 _base_settings = (
     'components/base.py',
-    # 'components/grpc_settings.py',
+    'components/celery_settings.py',
+    'components/email_config.py',
 
 
     # Select the right env:

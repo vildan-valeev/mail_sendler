@@ -49,7 +49,7 @@ services:
     build:
       context: .
       dockerfile: app/Dockerfile
-    command: "celery -A src worker -l info --pool=solo"
+    command: sh -c "poetry run celery -A src worker -l info --pool=solo"
     container_name: celery_worker
     env_file:
       - ./app/.env.dev

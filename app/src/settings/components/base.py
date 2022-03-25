@@ -22,7 +22,7 @@ DJANGO_APPS: Tuple[str, ...] = (
 )
 
 PROJECT_APPS: Tuple[str, ...] = (
-     'mail.apps.MailConfig',
+    'mail.apps.MailConfig',
 )
 
 THIRD_PARTY_APPS: Tuple[str, ...] = (
@@ -58,7 +58,7 @@ DATABASES = {
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
     'DIRS': [
-        BASE_DIR.joinpath('templates')
+        BASE_DIR.joinpath('templates', "media", "html_templates")
     ],
     'APP_DIRS': True,
     'OPTIONS': {
@@ -99,10 +99,9 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR.joinpath('media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 SITE_ID = 1  # for robots
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -110,4 +109,3 @@ PROJECT_NAME = config('PROJECT_NAME')
 
 REDIS_HOST = config("REDIS_HOST")
 REDIS_PORT = config("REDIS_PORT", cast=int, default=6379)
-

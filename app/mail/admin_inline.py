@@ -1,6 +1,10 @@
+from typing import Optional
+
 from django.contrib.admin import TabularInline
 from django.contrib.admin.views.main import ChangeList
 from django.core.paginator import Paginator
+from django.db.models import QuerySet
+from django.http import HttpRequest
 
 
 class InlineChangeList:
@@ -11,7 +15,7 @@ class InlineChangeList:
     multi_page = True
     get_query_string = ChangeList.__dict__['get_query_string']
 
-    def __init__(self, request, page_num, paginator):
+    def __init__(self, request: HttpRequest, page_num: int, paginator: Paginator):
         self.show_all = 'all' in request.GET
         self.page_num = page_num
         self.paginator = paginator
@@ -20,12 +24,12 @@ class InlineChangeList:
 
 
 class PaginationFormSetBase:
-    queryset = None
-    request = None
+    queryset: Optional[QuerySet] = None
+    request: Optional[HttpRequest] = None
     per_page = 20
     pagination_key = 'page'
 
-    def get_page_num(self):
+    def get_page_num(self) -> int:
         assert self.request is not None
         page = self.request.GET.get(self.pagination_key, '1')
         if page.isnumeric() and page > '0':
@@ -33,13 +37,13 @@ class PaginationFormSetBase:
 
         return 1
 
-    def get_page(self, paginator, page):
+    def get_page(self, paginator: Paginator, page: int):
         if page <= paginator.num_pages:
             return paginator.page(page)
 
         return paginator.page(1)
 
-    def mount_paginator(self, page_num=None):
+    def mount_paginator(self, page_num: int = None):
         assert self.queryset is not None and self.request is not None
         page_num = self.get_page_num() if not page_num else page_num
         self.paginator = Paginator(self.queryset, self.per_page)
@@ -53,7 +57,7 @@ class PaginationFormSetBase:
         self._queryset = self.page.object_list
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(PaginationFormSetBase, self).__init__(*args, **kwargs)
         self.mount_paginator()
         self.mount_queryset()
 
@@ -62,8 +66,9 @@ class TabularInlinePaginated(TabularInline):
     pagination_key = 'page'
     template = 'admin/mail/followergroup/tabular_paginated.html'
     per_page = 20
-    extra = 0
-    can_delete = False
+    # extra = 0
+    max_num = 0
+    can_delete = True
 
     def get_formset(self, request, obj=None, **kwargs):
         formset_class = super().get_formset(request, obj, **kwargs)

@@ -11,7 +11,7 @@ $ docker-compose -f docker-compose.dev.yml up -d --build
 ## Enter to container
 ```sh
 $ docker exec -it <id container or name> bash
-$ docker exec -it <id container or name> <command>
+$ docker exec -it <id container or name> poetry run <command>
 ```
 ## Database dump/load
 ```sh

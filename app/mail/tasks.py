@@ -1,20 +1,13 @@
 import csv
-from celery import shared_task
-from django.contrib import messages
-from django.core.files.uploadedfile import InMemoryUploadedFile
+import time
 
 from mail.models import Follower
+from src.celery import app
 
 
-def task_import_csv(file: InMemoryUploadedFile, group_id):
-    if not group_id:
-        return "Import CSV is possible, when  this group will be created...", messages.WARNING
-    reader = csv.reader(file)
+@app.task
+def process_task_import_csv(rows, group_id):
     Follower.objects.bulk_create(
-        [Follower(first_name=i[0], last_name=i[1], b_date=i[2], email=i[3], group_id=group_id) for i in
-         reader])
-
-
-@shared_task
-def add(x, y):
-    return x + y
+        [Follower(first_name=i[0], last_name=i[1], b_date=i[2], email=i[3], group_id=group_id) for i in rows]
+    )
+    return 1
