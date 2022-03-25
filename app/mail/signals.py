@@ -12,3 +12,4 @@ def order_publication(sender, instance, created, **kwargs):
         print('SIGNAL')
         # TODO: переключить на celery task
         send_emails(instance.id)
+

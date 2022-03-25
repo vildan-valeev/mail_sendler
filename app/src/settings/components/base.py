@@ -26,7 +26,7 @@ PROJECT_APPS: Tuple[str, ...] = (
 )
 
 THIRD_PARTY_APPS: Tuple[str, ...] = (
-
+    'django_celery_results',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -109,5 +109,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PROJECT_NAME = config('PROJECT_NAME')
 
 REDIS_HOST = config("REDIS_HOST")
-
+REDIS_PORT = config("REDIS_PORT", cast=int, default=6379)
 

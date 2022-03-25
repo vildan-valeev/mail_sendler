@@ -2,7 +2,6 @@ version: '3.7'
 
 services:
   redis:
-    restart: unless-stopped
     container_name: redis
     image: redis:latest
     ports:
@@ -20,7 +19,7 @@ services:
 
     volumes:
       - ./pg_data/db:/var/lib/postgresql/data
-    restart: unless-stopped
+
     ports:
       - "5432:5432"
     networks:
@@ -36,7 +35,7 @@ services:
     env_file:
       - ./app/.env.dev
     ports:
-      - "8000:8000"
+      - 8000:8000
     volumes:
       - ./app:/app/
     networks:
@@ -45,37 +44,42 @@ services:
       - redis
       - db
 
-  celery:
+  celery_worker:
+    restart: always
     build:
       context: .
       dockerfile: app/Dockerfile
-    command: celery -A app worker -l info --pool=solo
+    command: "celery -A src worker -l info --pool=solo"
     container_name: celery_worker
+    env_file:
+      - ./app/.env.dev
     volumes:
-      - ./rest:/usr/src/app/
+      - ./app:/app/
     depends_on:
       - redis
       - db
       - app
     networks:
       - mailsendler
-    restart: always
 
-  celery-beat:
-    build:
-      context: .
-      dockerfile: app/Dockerfile
-    command: celery -A app beat -l info
-    container_name: celery_beat
-    volumes:
-      - ./rest:/usr/src/app/
-    depends_on:
-      - app
-      - redis
-      - celery
-    networks:
-      - mailsendler
-    restart: always
+
+#  celery-beat:
+#    build:
+#      context: .
+#      dockerfile: app/Dockerfile
+#    command: celery -A src beat -l info
+##    container_name: celery_beat
+#    env_file:
+#      - ./app/.env.dev
+#    volumes:
+#      - ./app:/app/
+#    depends_on:
+#      - app
+#      - redis
+#      - db
+#      - celery_worker
+#    networks:
+#      - mailsendler
 
 networks:
   mailsendler:
