@@ -1,7 +1,7 @@
 import csv
 import io
-import time
 from itertools import islice
+
 from django.contrib import messages
 from django.core.files.uploadedfile import InMemoryUploadedFile
 

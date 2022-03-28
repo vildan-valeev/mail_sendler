@@ -37,3 +37,8 @@ def process_sends_emails(followers: List[dict], instance_id: int):
     # The connection was already open so send_messages() doesn't close it.
     # We need to manually close the connection.
     connection.close()
+
+
+# @shared_task
+# def process_sends_delayed_emails():
+#     pass

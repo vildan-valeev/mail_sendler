@@ -19,3 +19,9 @@ def send_emails(instance_id):
         process_sends_emails.delay(batch, int(instance_id))
 
     print('SENDING EMAIL')
+
+
+def send_delayed_emails(instance_id):
+    """Отправка отложенных записей"""
+    # аналогично send_emails. только на @shared_task
+    pass

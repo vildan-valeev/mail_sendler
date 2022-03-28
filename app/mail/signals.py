@@ -2,13 +2,15 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from mail.models import EmailSendler, Follower
-from mail.services.sending_emails import send_emails
+from mail.services.sending_emails import send_emails, send_delayed_emails
 
 
 @receiver(post_save, sender=EmailSendler)
-def order_publication(sender, instance, created, **kwargs):
+def order_publication(sender, instance:EmailSendler, created, **kwargs):
     # ыва
     if created:
         print('SIGNAL')
-        # TODO: переключить на celery task
-        send_emails(instance.id)
+        if not instance.delayed:
+            send_emails(instance.id)
+        else:
+            send_delayed_emails(instance.id)
