@@ -5,9 +5,6 @@ from mail.tasks import process_sends_emails
 
 
 def send_emails(instance_id):
-    # if not html_template:
-    #     pass
-
     sendler = EmailSendler.objects.filter(pk=instance_id).first()
     followers = sendler.follower_group.follower_set.all()
 

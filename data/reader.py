@@ -9,13 +9,3 @@ while True:
     if not batch:
         break
     print(batch)
-
-
-
-# import csv
-# outfile = 'csv_file.csv'
-# with open(outfile, 'w') as f:
-#     rows = csv.reader(f)
-#     print(rows)
-#     for i in rows:
-#         print(i[0])

@@ -23,7 +23,6 @@ def process_sends_emails(followers: List[dict], instance_id: int):
     connection = mail.get_connection()
     connection.open()
 
-    # messages = [EmailMultiAlternatives(...) for f in followers]
     messages = [mail.EmailMultiAlternatives(
         subject=sendler.subject,
         body=sendler.text,
@@ -34,11 +33,4 @@ def process_sends_emails(followers: List[dict], instance_id: int):
         for f in followers]
 
     connection.send_messages(messages)
-    # The connection was already open so send_messages() doesn't close it.
-    # We need to manually close the connection.
     connection.close()
-
-
-# @shared_task
-# def process_sends_delayed_emails():
-#     pass

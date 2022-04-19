@@ -66,7 +66,6 @@ class TabularInlinePaginated(TabularInline):
     pagination_key = 'page'
     template = 'admin/mail/followergroup/tabular_paginated.html'
     per_page = 20
-    # extra = 0
     max_num = 0
     can_delete = True
 

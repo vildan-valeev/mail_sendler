@@ -7,7 +7,6 @@ from mail.services.sending_emails import send_emails, send_delayed_emails
 
 @receiver(post_save, sender=EmailSendler)
 def order_publication(sender, instance:EmailSendler, created, **kwargs):
-    # ыва
     if created:
         print('SIGNAL')
         if not instance.delayed:
